@@ -43,9 +43,9 @@ func generate(cmd *cobra.Command, args []string) {
 		for _, parsedTemplateFile := range parsedTemplateFiles {
 			var path string
 
-			path = parsedTemplateFile.FilePath + "/docs/" + parsedTemplateFile.Name + "/docs/" + parsedTemplateFile.Name + ".md"
+			path = parsedTemplateFile.FilePath + "/" + parsedTemplateFile.Name + "/docs/" + parsedTemplateFile.Name + ".md"
 			if len(outputPrefix) > 0 {
-				path = outputPrefix + "/docs/" + parsedTemplateFile.Name + "/docs/" + parsedTemplateFile.Name + ".md"
+				path = outputPrefix + "/" + parsedTemplateFile.Name + "/docs/" + parsedTemplateFile.Name + ".md"
 			}
 			err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
 			if err != nil {
