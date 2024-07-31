@@ -8,7 +8,7 @@
 
 
 ```
-go install github.com/rohankmr414/argodocs@latest
+go install github.com/hoyazzang91/argodocs@latest
 ```
 Add `$GOPATH/bin` to your `$PATH` or copy `$GOPATH/bin/argodocs` to your `$PATH`.
 ## Usage

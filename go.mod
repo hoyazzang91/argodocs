@@ -1,4 +1,4 @@
-module github.com/rohankmr414/argodocs
+module github.com/hoyazzang91/argodocs
 
 go 1.21
 
@@ -15,8 +15,8 @@ require (
 )
 
 replace (
-	github.com/rohankmr414/argodocs/workflow => ./workflow
-	github.com/rohankmr414/argodocs/logger => ./logger
-	github.com/rohankmr414/argodocs/markdown => ./markdown
-	github.com/rohankmr414/argodocs/mdgen => ./mdgen
+	github.com/hoyazzang91/argodocs/logger => ./logger
+	github.com/hoyazzang91/argodocs/markdown => ./markdown
+	github.com/hoyazzang91/argodocs/mdgen => ./mdgen
+	github.com/hoyazzang91/argodocs/workflow => ./workflow
 )
