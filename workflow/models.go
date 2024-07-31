@@ -32,10 +32,15 @@ type TemplateFile struct {
 	Description        string
 	Kind               string
 	Version            string
+	Maintainer         string
+	Icon               string
+	Tags               []string
 	EntrypointTemplate string
-	Templates          []*Template
+	Command            string
 	FilePath           string
 	LastUpdatedAt      string
+	Data               []byte
+	Templates          []*Template
 }
 
 // Template represents a single workflow template in the file -> https://argoproj.github.io/argo-workflows/fields/#template

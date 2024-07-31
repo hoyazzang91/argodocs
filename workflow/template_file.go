@@ -1,6 +1,9 @@
 package workflow
 
-import "gopkg.in/yaml.v3"
+import (
+	"gopkg.in/yaml.v3"
+	"strings"
+)
 
 func parseTemplateFile(node *yaml.Node) (*TemplateFile, error) {
 	var result TemplateFile
@@ -22,8 +25,22 @@ func parseTemplateFile(node *yaml.Node) (*TemplateFile, error) {
 					if metadataMapNode.Kind == yaml.MappingNode {
 						for metadataChildIndex := 0; metadataChildIndex < len(metadataMapNode.Content); metadataChildIndex += 2 {
 							metadataChildNode := metadataMapNode.Content[metadataChildIndex]
-							if metadataChildNode.Value == "name" || metadataChildNode.Value == "generateName" {
-								result.Name = metadataMapNode.Content[metadataChildIndex+1].Value
+							if metadataChildNode.Value == "annotations" {
+								childNode := metadataMapNode.Content[metadataChildIndex+1]
+								for index := 0; index < len(childNode.Content); index += 2 {
+									subNode := childNode.Content[index]
+									switch subNode.Value {
+									case "workflows.argoproj.io/description":
+										result.Description = childNode.Content[index+1].Value
+									case "workflows.argoproj.io/maintainer":
+										result.Maintainer = childNode.Content[index+1].Value
+									case "workflows.argoproj.io/tags":
+										result.Tags = strings.Split(childNode.Content[index+1].Value, ",")
+									case "workflows.argoproj.io/version":
+										result.Version = childNode.Content[index+1].Value
+									}
+
+								}
 							}
 						}
 					}

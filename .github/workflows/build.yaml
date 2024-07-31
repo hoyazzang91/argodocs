@@ -1,7 +1,12 @@
 name: build
 
 # on events
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - oni
+
+  workflow_dispatch:
 
 # workflow tasks
 jobs:

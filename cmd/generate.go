@@ -1,15 +1,13 @@
 package cmd
 
 import (
-	"os"
-	"path/filepath"
-	"strings"
-
 	"github.com/rohankmr414/argodocs/logger"
 	"github.com/rohankmr414/argodocs/markdown"
 	"github.com/rohankmr414/argodocs/mdgen"
 	"github.com/rohankmr414/argodocs/workflow"
 	"github.com/spf13/cobra"
+	"os"
+	"path/filepath"
 )
 
 var outputPrefix string
@@ -44,26 +42,10 @@ func generate(cmd *cobra.Command, args []string) {
 		}
 		for _, parsedTemplateFile := range parsedTemplateFiles {
 			var path string
-			if outputPrefix == "" {
-				yamlFileNameSplit := strings.Split(parsedTemplateFile.FilePath, "/")
-				mdFileName := strings.Replace(yamlFileNameSplit[len(yamlFileNameSplit)-1], ".yaml", ".md", 1)
-				mdFileName = strings.Replace(mdFileName, ".yml", ".md", 1)
-				path = "./" + "docs" + "/" + mdFileName
-			} else {
-				if strings.HasPrefix(outputPrefix, ".") {
-					yamlFileNameSplit := strings.Split(parsedTemplateFile.FilePath, "/")
-					mdFileName := strings.Replace(yamlFileNameSplit[len(yamlFileNameSplit)-1], ".yaml", ".md", 1)
-					mdFileName = strings.Replace(mdFileName, ".yml", ".md", 1)
 
-					yamlPathSplit := strings.Split(parsedTemplateFile.FilePath, "/")
-					mdFullPath := strings.Join(yamlPathSplit[:len(yamlPathSplit)-1], "/") + "/" + outputPrefix + "/" + mdFileName
-					path = mdFullPath
-				} else {
-					yamlFileNameSplit := strings.Split(parsedTemplateFile.FilePath, "/")
-					mdFileName := strings.Replace(yamlFileNameSplit[len(yamlFileNameSplit)-1], ".yaml", ".md", 1)
-					mdFileName = strings.Replace(mdFileName, ".yml", ".md", 1)
-					path = outputPrefix + "/" + mdFileName
-				}
+			path = parsedTemplateFile.FilePath + "/docs/" + parsedTemplateFile.Name + "/docs/" + parsedTemplateFile.Name + ".md"
+			if len(outputPrefix) > 0 {
+				path = outputPrefix + "/docs/" + parsedTemplateFile.Name + "/docs/" + parsedTemplateFile.Name + ".md"
 			}
 			err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
 			if err != nil {
