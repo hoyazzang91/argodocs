@@ -2,6 +2,7 @@ package workflow
 
 import (
 	"gopkg.in/yaml.v3"
+	"strconv"
 	"strings"
 )
 
@@ -15,7 +16,6 @@ func parseTemplateFile(node *yaml.Node) (*TemplateFile, error) {
 			if child.Kind == yaml.ScalarNode {
 				switch child.Value {
 				case "apiVersion":
-					result.Version = node.Content[index+1].Value
 					result.Description += cleanupComment(node.Content[index].HeadComment)
 				case "kind":
 					result.Kind = node.Content[index+1].Value
@@ -37,7 +37,7 @@ func parseTemplateFile(node *yaml.Node) (*TemplateFile, error) {
 									case "workflows.argoproj.io/tags":
 										result.Tags = strings.Split(childNode.Content[index+1].Value, ",")
 									case "workflows.argoproj.io/version":
-										result.Version = childNode.Content[index+1].Value
+										result.Version = strconv.Quote(childNode.Content[index+1].Value)
 									}
 
 								}
