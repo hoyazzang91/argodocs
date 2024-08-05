@@ -26,6 +26,8 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 	md.Write("tags: " + strings.Join(templateFile.Tags, ",") + " \n")
 	md.Write("version: " + templateFile.Version + " \n")
 	md.Write("icon: " + templateFile.Icon + " \n")
+	md.Writeln("layout: page")
+	md.Write("descriptoin: " + strings.Replace(templateFile.Description, "\n", " ", -1) + "\n")
 	md.Write("---\n")
 	md.WriteHeader(templateFile.Name, 1)
 	md.Write("\n")
@@ -49,7 +51,7 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 	table = markdown.NewTable(len(templateFile.Templates), 3)
 	table.SetTableTitle(0, "Name")
 	table.SetTableTitle(1, "Type")
-	table.SetTableTitle(2, "Line Number")
+	table.SetTableTitle(2, "Description")
 
 	for i, template := range templateFile.Templates {
 		table.SetTableContent(i, 0, markdown.GetLink(template.Name, "#"+template.Name))
@@ -66,7 +68,7 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 		md.Write("\n")
 		md.Writeln("Type: " + markdown.GetMonospaceCode(templateTypes[template.Type]))
 		md.Write("\n")
-		md.Writeln(template.Description)
+		md.Writeln("Description: " + template.Description + "\n")
 
 		if template.Type == workflow.CONTAINER_TEMPLATE || template.Type == workflow.SCRIPT_TEMPLATE {
 			md.Writeln("\nImage: " + markdown.GetMonospaceCode(template.ContainerImageTag) + "\n")

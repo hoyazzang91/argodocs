@@ -2,6 +2,7 @@ package workflow
 
 import (
 	"os"
+	"strings"
 	"time"
 
 	"gopkg.in/yaml.v3"
@@ -58,7 +59,7 @@ func parseFile(path string, name string) (*TemplateFile, error) {
 
 	_, err = os.Open(filePath + "/icon.png")
 	if err == nil {
-		templateFile.Icon = filePath + "/icon.png"
+		templateFile.Icon = strings.Replace(filePath, "_", "", 1) + "/icon.png"
 	}
 
 	if templateFile.EntrypointTemplate == "" {
