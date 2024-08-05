@@ -42,6 +42,7 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 	table.SetTableContent(0, 2, templateFile.EntrypointTemplate)
 	table.SetTableContent(0, 3, templateFile.LastUpdatedAt)
 	md.WriteTable(table)
+	md.Write("\n")
 	md.Writeln(templateFile.Description)
 	md.WriteHeader("Templates", 2)
 	md.Write("\n")
