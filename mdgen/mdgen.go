@@ -41,6 +41,7 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 	table.SetTableContent(0, 1, templateFile.Version)
 	table.SetTableContent(0, 2, templateFile.EntrypointTemplate)
 	table.SetTableContent(0, 3, templateFile.LastUpdatedAt)
+	md.Writeln("{: .table .table-striped .table-hover}")
 	md.WriteTable(table)
 	md.Write("\n")
 	md.Writeln(templateFile.Description)
@@ -59,7 +60,7 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 		table.SetTableContent(i, 1, markdown.GetMonospaceCode(templateTypes[template.Type]))
 		table.SetTableContent(i, 2, strconv.Itoa(template.LineNumber))
 	}
-
+	md.Writeln("{: .table .table-striped .table-hover}")
 	md.WriteTable(table)
 
 	for _, template := range templateFile.Templates {
