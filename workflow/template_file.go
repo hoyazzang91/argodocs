@@ -32,11 +32,11 @@ func parseTemplateFile(node *yaml.Node) (*TemplateFile, error) {
 									switch subNode.Value {
 									case "workflows.argoproj.io/description":
 										result.Description = childNode.Content[index+1].Value
-									case "workflows.argoproj.io/maintainer":
+									case "flops-hub/maintainer":
 										result.Maintainer = childNode.Content[index+1].Value
-									case "workflows.argoproj.io/tags":
+									case "flops-hub/tags":
 										result.Tags = strings.Split(childNode.Content[index+1].Value, ",")
-									case "workflows.argoproj.io/version":
+									case "flops-hub/version":
 										result.Version = strconv.Quote(childNode.Content[index+1].Value)
 									}
 
