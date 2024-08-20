@@ -34,6 +34,8 @@ func parseParameter(node *yaml.Node) (*Parameter, error) {
 				result.Name = node.Content[index+1].Value
 				result.Description += "\n"
 				result.Description += cleanupComment(node.Content[index+1].LineComment)
+			case "default":
+				result.Default = node.Content[index+1].Value
 			case "value":
 				result.Required = false
 			case "valueFrom":

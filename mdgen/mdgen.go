@@ -1,7 +1,6 @@
 package mdgen
 
 import (
-	"strconv"
 	"strings"
 
 	"github.com/hoyazzang91/argodocs/markdown"
@@ -23,10 +22,10 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 
 	md.Write("---\n")
 	md.Write("title: " + templateFile.Name + " \n")
-	md.Write("tags: " + strings.Join(templateFile.Tags, ",") + " \n")
+	md.Write("tags: " + "[" + strings.Join(templateFile.Tags, ",") + "]" + " \n")
 	md.Write("version: " + templateFile.Version + " \n")
 	md.Write("icon: " + templateFile.Icon + " \n")
-	md.Writeln("layout: page")
+	md.Writeln("layout: workflow")
 	md.Write("descriptoin: " + strings.Replace(templateFile.Description, "\n", " ", -1) + "\n")
 	md.Write("---\n")
 	md.WriteHeader(templateFile.Name, 1)
@@ -58,7 +57,8 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 	for i, template := range templateFile.Templates {
 		table.SetTableContent(i, 0, markdown.GetLink(template.Name, "#"+template.Name))
 		table.SetTableContent(i, 1, markdown.GetMonospaceCode(templateTypes[template.Type]))
-		table.SetTableContent(i, 2, strconv.Itoa(template.LineNumber))
+		//table.SetTableContent(i, 2, strconv.Itoa(template.LineNumber))
+		table.SetTableContent(i, 2, template.Description)
 	}
 	md.Writeln("{: .table .table-striped .table-hover}")
 	md.WriteTable(table)
@@ -104,6 +104,11 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 						inputParamChild.Value = markdown.GetMonospaceCode(param.Name)
 					}
 				}
+				trimmedDefault := strings.Trim(param.Default, "\n")
+				if trimmedDefault != "" {
+					inputParamChild.Value = inputParamChild.Value + ", default: " + trimmedDefault
+				}
+
 				inputParamChild.NodeType = markdown.ListTypeUnordered
 				inputParamList.Children = append(inputParamList.Children, &inputParamChild)
 			}

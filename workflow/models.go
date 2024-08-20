@@ -75,6 +75,7 @@ type InputOutput struct {
 // Parameter represents an input or output parameter in the template -> https://argoproj.github.io/argo-workflows/fields/#parameter
 type Parameter struct {
 	Name        string
+	Default     string
 	Description string
 	Required    bool
 }
