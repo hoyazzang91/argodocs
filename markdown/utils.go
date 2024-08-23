@@ -24,3 +24,9 @@ func GetMonospaceCode(content string) string {
 func GetLink(text, url string) string {
 	return fmt.Sprintf("[%s](%s)", text, url)
 }
+
+func escapeMustache(content string) string {
+	convert := strings.ReplaceAll(content, "{{", "{% raw %}{{")
+	convert = strings.ReplaceAll(convert, "}}", "}}{% endraw %}")
+	return convert
+}

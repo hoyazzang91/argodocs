@@ -80,5 +80,6 @@ func (md *Doc) WriteList(tree *ListNode) *Doc {
 
 // Export writes the entire content to a given file.
 func (md *Doc) Export(filename string) error {
-	return ioutil.WriteFile(filename, []byte(md.builder.String()), os.ModePerm)
+	data := escapeMustache(md.builder.String())
+	return ioutil.WriteFile(filename, []byte(data), os.ModePerm)
 }
