@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var outputPrefix string
@@ -43,9 +44,9 @@ func generate(cmd *cobra.Command, args []string) {
 		for _, parsedTemplateFile := range parsedTemplateFiles {
 			var path string
 
-			path = parsedTemplateFile.FilePath + "/docs/" + parsedTemplateFile.Name + ".md"
+			path = parsedTemplateFile.FilePath + "/docs/" + strings.Trim(parsedTemplateFile.Version, "\"") + "/" + parsedTemplateFile.Name + ".md"
 			if len(outputPrefix) > 0 {
-				path = outputPrefix + "/" + parsedTemplateFile.Name + "/docs/" + parsedTemplateFile.Name + ".md"
+				path = outputPrefix + "/" + parsedTemplateFile.Name + "/docs/" + strings.Trim(parsedTemplateFile.Version, "\"") + "/" + parsedTemplateFile.Name + ".md"
 			}
 			err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
 			if err != nil {

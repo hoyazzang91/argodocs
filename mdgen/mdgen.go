@@ -224,5 +224,11 @@ func GetMdDoc(templateFile *workflow.TemplateFile) (*markdown.Doc, error) {
 
 		md.WriteList(&parent)
 	}
+
+	md.WriteHeader("Manifest", 2)
+	md.Writeln("```yaml")
+	md.Writeln(string(templateFile.Data))
+	md.Writeln("```")
+
 	return md, nil
 }

@@ -1,29 +1,45 @@
 package workflow
 
 import (
+	"gopkg.in/yaml.v3"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
-
-	"gopkg.in/yaml.v3"
 )
 
 // ParseFiles accepts a glob pattern for argo workflow template files, parses them and returns them as TemplateFile structs
-func ParseFiles(path string) ([]*TemplateFile, error) {
+func ParseFiles(root string) ([]*TemplateFile, error) {
 	var result []*TemplateFile
 
-	dir, err := os.ReadDir(path)
-	if err != nil {
-		panic(err)
-	}
+	//dir, err := os.ReadDir(path)
+	//if err != nil {
+	//	panic(err)
+	//}
 
-	for _, f := range dir {
-		var templateFile *TemplateFile
-		templateFile, err = parseFile(path, f.Name())
+	var paths []string
+
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			continue
+			return err
 		}
-		result = append(result, templateFile)
+
+		fileInfo, _ := os.Stat(path)
+		if !info.IsDir() && fileInfo.Size() > 0 {
+			paths = append(paths, path)
+		}
+		return nil
+	})
+
+	for _, f := range paths {
+		var templateFile *TemplateFile
+		if strings.Contains(filepath.Ext(f), "yaml") {
+			templateFile, err = parseFile(root, f)
+			if err != nil {
+				continue
+			}
+			result = append(result, templateFile)
+		}
 	}
 
 	return result, nil
@@ -32,8 +48,8 @@ func ParseFiles(path string) ([]*TemplateFile, error) {
 // parseFile parses a single argo workflow template file and returns that as a TemplateFile object
 func parseFile(path string, name string) (*TemplateFile, error) {
 	yamlNode := yaml.Node{}
-	filePath := path + "/" + name
-	fileName := filePath + "/manifests.yaml"
+	filePath := filepath.Dir(name)
+	fileName := name
 	url := "https://raw.githubusercontent.com/argoproj-labs/argo-workflows-catalog/master/" + fileName
 
 	yamlFileContent, err := os.ReadFile(fileName)
@@ -52,8 +68,9 @@ func parseFile(path string, name string) (*TemplateFile, error) {
 		return nil, err
 	}
 
-	templateFile.Name = name
-	templateFile.FilePath = filePath
+	templateFile.Data = yamlFileContent
+	templateFile.Name = strings.Split(filePath, string(filepath.Separator))[1]
+	templateFile.FilePath = path + "/" + templateFile.Name
 	templateFile.LastUpdatedAt = time.Now().Format(time.RFC850)
 	templateFile.Command = "kubectl apply -f " + url
 
